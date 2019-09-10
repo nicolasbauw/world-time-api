@@ -10,7 +10,7 @@ RUN strip /home/rust/src/target/x86_64-unknown-linux-musl/release/world-time-api
 FROM alpine:latest
 RUN apk update && apk add --no-cache git
 WORKDIR /usr/local/share/world-time-api
-RUN git clone https://github.com/HMKaiser/world-time-timezones.git .
+RUN git clone https://github.com/HMKaiser/world-time-timezones.git timezones
 COPY --from=builder \
     /home/rust/src/target/x86_64-unknown-linux-musl/release/world-time-api \
     .

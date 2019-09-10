@@ -36,6 +36,7 @@ struct RespTz {
 #[get("/<region>/<city>")]
 fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     let mut s = String::new();
+    s.push_str("timezones/");
     s.push_str(&region);
     s.push_str("/");
     s.push_str(&city);
