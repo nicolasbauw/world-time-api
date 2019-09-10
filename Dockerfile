@@ -15,7 +15,7 @@ WORKDIR /usr/local/share/world-time-api
 COPY --from=builder \
     /home/rust/src/target/x86_64-unknown-linux-musl/release/world-time-api \
     .
-COPY Europe .
+COPY Europe Europe
 ENV ROCKET_ENV=production \
     ROCKET_LOG=off
 RUN adduser -D -u 1001 runner; chown -R 1001 /usr/local/share/world-time-api
