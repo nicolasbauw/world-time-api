@@ -68,5 +68,13 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![get_tzinfo]).launch();
+    rocket::ignite()
+        .mount("/", routes![get_tzinfo])
+        .register(catchers![not_found])
+        .launch();
+}
+
+#[catch(404)]
+fn not_found(_req: &rocket::Request) -> String {
+    format!("Timezone not implemented\n")
 }
