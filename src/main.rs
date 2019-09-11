@@ -13,8 +13,8 @@ struct TZ {
     timezone: String,
     raw_offset: i32,
     dst_offset: i32,
-    dst_from: String,
-    dst_until: String,
+    dst_from: Option<String>,
+    dst_until: Option<String>,
     abbreviation: String,
     dst_abbreviation: String,
 }
@@ -27,8 +27,8 @@ struct RespTz {
     utc_offset: String,
     utc_datetime: String,
     datetime: String,
-    dst_from: String,
-    dst_until: String,
+    dst_from: Option<String>,
+    dst_until: Option<String>,
     dst: bool,
     abbreviation: String,
 }
