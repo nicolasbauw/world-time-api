@@ -47,9 +47,18 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     };
     let tz: TZ = serde_json::from_str(&z).unwrap();
     let d = Utc::now();
-    let dst_from = DateTime::parse_from_rfc3339(&tz.dst_from).unwrap();
-    let dst_until = DateTime::parse_from_rfc3339(&tz.dst_until).unwrap();
-    let dst = d.with_timezone(&FixedOffset::east(0)) > dst_from && d.with_timezone(&FixedOffset::east(0)) < dst_until;
+    let dst_from = tz.dst_from.clone();
+    let dst_until = tz.dst_until.clone();
+    let dst = match dst_from {
+        // dst_from defined ? country observes dst, let's see if we are in a dst period
+        Some(from) => {
+            let dst_from = DateTime::parse_from_rfc3339(&from).unwrap();
+            let dst_until = DateTime::parse_from_rfc3339(&dst_until.unwrap()).unwrap();
+            d.with_timezone(&FixedOffset::east(0)) > dst_from && d.with_timezone(&FixedOffset::east(0)) < dst_until
+        },
+        // dst_from undefined ? country does not observe dst
+        None => false
+    };
     let raw_offset = tz.raw_offset;
     let dst_offset = tz.dst_offset;
     let utc_offset = if dst == true { FixedOffset::east(raw_offset + dst_offset) } else { FixedOffset::east(raw_offset) }; 
