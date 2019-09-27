@@ -2,7 +2,6 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 extern crate serde_derive;
-extern crate tzfile;
 extern crate tzparse;
 
 use serde_derive::{Serialize};

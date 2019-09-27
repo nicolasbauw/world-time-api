@@ -12,7 +12,6 @@ serde = "*"
 serde_derive = "*"
 serde_json = "1.0.40"
 chrono = { version = "0.4", features = ["serde"] }
-tzfile = { path = "../rs-tzfile" }
 tzparse = { path = "../rs-tzparse" }
 
 [dependencies.rocket_contrib]
