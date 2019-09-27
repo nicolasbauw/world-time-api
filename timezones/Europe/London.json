@@ -1,9 +1,0 @@
-{
-    "timezone":"Europe/London",
-    "raw_offset":0,
-    "dst_offset":3600,
-    "dst_from":"2019-03-31T01:00:00+00:00",
-    "dst_until":"2019-10-27T01:00:00+00:00",
-    "abbreviation":"GMT",
-    "dst_abbreviation":"BST"
-}
