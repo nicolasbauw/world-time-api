@@ -5,12 +5,8 @@ extern crate serde_derive;
 extern crate tzfile;
 extern crate tzparse;
 
-use chrono::prelude::*;
-use serde_derive::{Deserialize, Serialize};
+use serde_derive::{Serialize};
 use rocket_contrib::json::JsonValue;
-use std::fs;
-use tzfile::*;
-use tzparse::*;
 
 #[derive(Serialize)]
 struct RespTz {
