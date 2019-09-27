@@ -2,22 +2,15 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 extern crate serde_derive;
+extern crate tzfile;
+extern crate tzparse;
 
 use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
 use rocket_contrib::json::JsonValue;
 use std::fs;
-
-#[derive(Deserialize)]
-struct TZ {
-    timezone: String,
-    raw_offset: i32,
-    dst_offset: i32,
-    dst_from: Option<String>,
-    dst_until: Option<String>,
-    abbreviation: String,
-    dst_abbreviation: String,
-}
+use tzfile::*;
+use tzparse::*;
 
 #[derive(Serialize)]
 struct RespTz {
@@ -29,50 +22,41 @@ struct RespTz {
     datetime: String,
     dst_from: Option<String>,
     dst_until: Option<String>,
-    dst: bool,
     abbreviation: String,
 }
 
 #[get("/<region>/<city>")]
 fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     let mut s = String::new();
-    s.push_str("timezones/");
     s.push_str(&region);
     s.push_str("/");
     s.push_str(&city);
-    s.push_str(".json");
-    let z = match fs::read_to_string(s) {
-        Ok(f) => f,
-        Err(_) => return None
+    
+    let t = match tzparse::get(&s, 2019) {
+        Some(tz) => tzparse::worldtime(tz).unwrap(),
+        None => return None
     };
-    let tz: TZ = serde_json::from_str(&z).unwrap();
-    let d = Utc::now();
-    let dst_from = tz.dst_from.clone();
-    let dst_until = tz.dst_until.clone();
-    let dst = match dst_from {
-        // dst_from defined ? country observes dst, let's see if we are in a dst period
-        Some(from) => {
-            let dst_from = DateTime::parse_from_rfc3339(&from).unwrap();
-            let dst_until = DateTime::parse_from_rfc3339(&dst_until.unwrap()).unwrap();
-            d.with_timezone(&FixedOffset::east(0)) > dst_from && d.with_timezone(&FixedOffset::east(0)) < dst_until
-        },
-        // dst_from undefined ? country does not observe dst
-        None => false
+
+    let dst_from = match t.dst_from {
+        Some(d) => Some(format!("{:?}", d)),
+        None => None
     };
-    let raw_offset = tz.raw_offset;
-    let dst_offset = tz.dst_offset;
-    let utc_offset = if dst == true { FixedOffset::east(raw_offset + dst_offset) } else { FixedOffset::east(raw_offset) }; 
+
+    let dst_until = match t.dst_until {
+        Some(d) => Some(format!("{:?}", d)),
+        None => None
+    };
+
     let resp = RespTz {
-        timezone: tz.timezone,
-        raw_offset: tz.raw_offset,
-        dst_offset: tz.dst_offset,
-        utc_offset: format!("{}", utc_offset),
-        utc_datetime: format!("{}", d),
-        datetime: format!("{}", d.with_timezone(&utc_offset)),
-        dst_from: tz.dst_from,
-        dst_until: tz.dst_until,
-        dst: dst,
-        abbreviation: if dst {tz.dst_abbreviation} else {tz.abbreviation},
+        timezone: s,
+        raw_offset: t.raw_offset as i32,
+        dst_offset: t.dst_offset as i32,
+        utc_offset: format!("{:?}", t.utc_offset),
+        utc_datetime: format!("{:?}", t.utc_datetime),
+        datetime: format!("{:?}", t.datetime),
+        dst_from: dst_from,
+        dst_until: dst_until,
+        abbreviation: t.abbreviation
     };
     Some(json!(resp))
 }
