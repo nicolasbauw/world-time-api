@@ -6,6 +6,7 @@ extern crate tzparse;
 
 use serde_derive::{Serialize};
 use rocket_contrib::json::JsonValue;
+use chrono::prelude::*;
 
 #[derive(Serialize)]
 struct RespTz {
@@ -27,7 +28,9 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     s.push_str("/");
     s.push_str(&city);
     
-    let t = match tzparse::get(&s, 2019) {
+    let d = Utc::now();
+    let y = d.format("%Y").to_string().parse().unwrap();
+    let t = match tzparse::get(&s, y) {
         Some(tz) => tzparse::worldtime(tz).unwrap(),
         None => return None
     };
