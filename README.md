@@ -25,4 +25,4 @@ Some explanations about the offset fields:
 - dst_offset : the offset to utc during daylight saving time, in seconds
 - utc_offset : the current offset to utc, taking into account daylight saving time or not (according to dst_from and dst_until), in +/- HH:MM
 
-Provided (untested since last major updates, are TZfiles in alpine image ?) dockerfile builds the app with statically compiled musl libc and then uses an alpine image to keep a low size.
+Provided dockerfile builds the app with statically compiled musl libc and then uses an alpine image to keep a low size.

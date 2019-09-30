@@ -8,7 +8,7 @@ RUN cargo build --release
 RUN strip /home/rust/src/target/x86_64-unknown-linux-musl/release/world-time-api
 
 FROM alpine:latest
-RUN apk update && apk add --no-cache git
+RUN apk update && apk add --no-cache tzdata
 WORKDIR /usr/local/share/world-time-api
 COPY --from=builder \
     /home/rust/src/target/x86_64-unknown-linux-musl/release/world-time-api \
