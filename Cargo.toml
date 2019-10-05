@@ -12,7 +12,7 @@ serde = "*"
 serde_derive = "*"
 serde_json = "1.0.40"
 chrono = { version = "0.4", features = ["serde"] }
-tzparse = { git = "https://github.com/nicolasbauw/rs-tzparse.git", tag = "v0.1.1" }
+tzparse = { path = "../rs-tzparse" }
 
 [dependencies.rocket_contrib]
 version = "0.4.2"

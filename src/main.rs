@@ -32,7 +32,7 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     let d = Utc::now();
     let y = d.format("%Y").to_string().parse().unwrap();
     let t = match tzparse::get(&s, Some(y)) {
-        Some(tz) => tzparse::worldtime(tz).unwrap(),
+        Some(tz) => tzparse::worldtime(&tz).unwrap(),
         None => return None
     };
 
