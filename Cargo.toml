@@ -1,6 +1,6 @@
 [package]
 name = "world-time-api"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Nicolas BAUW <nbauw@hotmail.com>"]
 edition = "2018"
 
@@ -12,7 +12,7 @@ serde = "*"
 serde_derive = "*"
 serde_json = "1.0.40"
 chrono = { version = "0.4", features = ["serde"] }
-tzparse = { git = "https://github.com/nicolasbauw/rs-tzparse.git", tag = "v0.1.0" }
+tzparse = { git = "https://github.com/nicolasbauw/rs-tzparse.git", tag = "v0.1.1" }
 
 [dependencies.rocket_contrib]
 version = "0.4.2"

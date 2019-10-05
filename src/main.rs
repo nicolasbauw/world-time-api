@@ -18,6 +18,7 @@ struct RespTz {
     datetime: String,
     dst_from: Option<String>,
     dst_until: Option<String>,
+    dst_period: bool,
     abbreviation: String,
 }
 
@@ -30,7 +31,7 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     
     let d = Utc::now();
     let y = d.format("%Y").to_string().parse().unwrap();
-    let t = match tzparse::get(&s, y) {
+    let t = match tzparse::get(&s, Some(y)) {
         Some(tz) => tzparse::worldtime(tz).unwrap(),
         None => return None
     };
@@ -54,6 +55,7 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
         datetime: format!("{:?}", t.datetime),
         dst_from: dst_from,
         dst_until: dst_until,
+        dst_period: t.dst_period,
         abbreviation: t.abbreviation
     };
     Some(json!(resp))
