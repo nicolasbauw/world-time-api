@@ -7,9 +7,7 @@ There are similar APIs already available on internet, my goals were:
 Example:
 ```
 curl http://localhost:8000/Europe/Paris
-{"abbreviation":"CEST","datetime":"2019-09-27T18:58:03.604706700+02:00",
-"dst_from":"2019-03-31T01:00:00Z","dst_offset":7200,"dst_until":"2019-10-27T01:00:00Z",
-"raw_offset":3600,"timezone":"Europe/Paris","utc_datetime":"2019-09-27T16:58:03.604706700Z","utc_offset":"+02:00"}
+{"abbreviation":"CEST","datetime":"2019-10-08T20:16:13.612030900+02:00","dst_from":"2019-03-31T01:00:00Z","dst_offset":7200,"dst_period":true,"dst_until":"2019-10-27T01:00:00Z","raw_offset":3600,"timezone":"Europe/Paris","utc_datetime":"2019-10-08T18:16:13.612030900Z","utc_offset":"+02:00","week":40}
 ```
 
 It uses system TZfiles (default location on Linux and Macos /usr/share/zoneinfo).
