@@ -33,8 +33,8 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
     let d = Utc::now();
     let y = d.format("%Y").to_string().parse().unwrap();
     let w = d.format("%W").to_string().parse().unwrap();
-    let t = match tzparse::get(&s, Some(y)) {
-        Some(tz) => tzparse::worldtime(&tz).unwrap(),
+    let t = match tzparse::get_timechanges(&s, Some(y)) {
+        Some(tz) => tzparse::get_zoneinfo(&tz).unwrap(),
         None => return None
     };
 
