@@ -4,23 +4,7 @@
 extern crate serde_derive;
 extern crate tzparse;
 
-use serde_derive::{Serialize};
 use rocket_contrib::json::JsonValue;
-
-#[derive(Serialize)]
-struct RespTz {
-    timezone: String,
-    raw_offset: i32,
-    dst_offset: i32,
-    utc_offset: String,
-    utc_datetime: String,
-    datetime: String,
-    week_number: i32,
-    dst_from: Option<String>,
-    dst_until: Option<String>,
-    dst_period: bool,
-    abbreviation: String,
-}
 
 #[get("/<region>/<city>")]
 fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
@@ -34,32 +18,7 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
         None => return None
     };
 
-    let w = t.datetime.format("%V").to_string().parse().unwrap();
-
-    let dst_from = match t.dst_from {
-        Some(d) => Some(format!("{:?}", d)),
-        None => None
-    };
-
-    let dst_until = match t.dst_until {
-        Some(d) => Some(format!("{:?}", d)),
-        None => None
-    };
-
-    let resp = RespTz {
-        timezone: s,
-        week_number: w,
-        raw_offset: t.raw_offset as i32,
-        dst_offset: t.dst_offset as i32,
-        utc_offset: format!("{:?}", t.utc_offset),
-        utc_datetime: format!("{:?}", t.utc_datetime),
-        datetime: format!("{:?}", t.datetime),
-        dst_from: dst_from,
-        dst_until: dst_until,
-        dst_period: t.dst_period,
-        abbreviation: t.abbreviation
-    };
-    Some(json!(resp))
+    Some(json!(t))
 }
 
 fn main() {
