@@ -11,12 +11,14 @@ fn get_tzinfo(region: String, city: String) -> Option<content::Json<String>> {
     s.push_str(&city);
     
     let t = match tzparse::get_zoneinfo(&s){
-        Some(t) => t,
-        None => return None
+        Ok(t) => t.to_json(),
+        Err(_) => return None
     };
 
-    let resp = serde_json::to_string(&t).unwrap();
-    Some(content::Json(resp))
+    match t {
+        Ok(t) => Some(content::Json(t)),
+        Err(_) => None
+    }
 }
 
 fn main() {
