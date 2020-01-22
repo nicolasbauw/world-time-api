@@ -1,13 +1,12 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use] extern crate rocket;
-#[macro_use] extern crate rocket_contrib;
 extern crate serde_derive;
 extern crate tzparse;
 
-use rocket_contrib::json::JsonValue;
+use rocket::response::content;
 
 #[get("/<region>/<city>")]
-fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
+fn get_tzinfo(region: String, city: String) -> Option<content::Json<String>> {
     let mut s = String::new();
     s.push_str(&region);
     s.push_str("/");
@@ -18,7 +17,8 @@ fn get_tzinfo(region: String, city: String) -> Option<JsonValue> {
         None => return None
     };
 
-    Some(json!(t))
+    let resp = serde_json::to_string(&t).unwrap();
+    Some(content::Json(resp))
 }
 
 fn main() {
