@@ -13,4 +13,4 @@ repository = "https://github.com/nicolasbauw/world-time-api"
 
 [dependencies]
 rocket = "0.4.2"
-tzparse = { version = "1.0.1", features=["json"] }
+tzparse = { version = "1.0.3", features=["json"] }
