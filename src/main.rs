@@ -69,12 +69,12 @@ fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Stat
 // Removed rocket::Request variable since we aren't using it. 
 #[catch(400)]
 fn bad_request() -> Json<&'static str> {
-    Json("Invalid Timezone")
+    Json("\"Invalid Timezone\"")
 }
 // Again, nice to have Json.
 #[catch(404)]
 fn not_found<'a>(req: &'a rocket::Request) -> Json<String> {
-    Json(format!("Unable to find Timezone {}", req.uri().path()))
+    Json(format!("\"Unable to find Timezone {}\"", req.uri().path()))
 }
     
 fn main() {
