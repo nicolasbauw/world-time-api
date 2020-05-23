@@ -652,7 +652,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "world-time-api"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "rocket 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "tzparse 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
