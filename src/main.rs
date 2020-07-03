@@ -2,6 +2,7 @@
 #[macro_use] extern crate rocket;
 
 use rocket::{response::content::Json, http::Status};
+use std::env;
 
 // Return a String that's correctly formatted for Timezone lookup.
 // Error if can't be parsed.
@@ -36,15 +37,23 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String>{
 fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Status> {
     // If both geo-location values can be parsed...
     if let (Ok(region), Ok(city)) = (to_valid_format(region), to_valid_format(city)) {
+        // TZfiles location can be customized through the TZFILES_DIR environment. Default location is /usr/share/zoneinfo.
+        let mut tz_file = {
+            let mut d = String::new();
+            d.push_str(&env::var("TZFILES_DIR").unwrap_or(format!("/usr/share/zoneinfo/")));
+            d
+        };
+    
         // Then we create a String using format to create a Timezone lookup key.
         let s = format!("{}/{}", region, city);
+        tz_file.push_str(&s);
 
         // We run `.ok` to convert from Result to Option.
         // `and_then` lets us work directly with the values. 
         // If it encounters a problem, then it returns None.
         // No matter if we get a Some or None, we wrap it in Ok.
         // We do this because Rocket can handle None as a 404.
-        let tz = tzparse::get_zoneinfo(s.as_str())
+        let tz = tzparse::get_zoneinfo(&tz_file)
             .ok()
             .and_then(|tz_info| {
                tz_info
