@@ -42,7 +42,7 @@ fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Stat
         tz_file.push_str(&env::var("TZFILES_DIR").unwrap_or(format!("/usr/share/zoneinfo/")));
     
         // Then we create a String using format to create a Timezone lookup key.
-        let s = format!("{}/{}", region, city);
+        let s = if cfg!(windows) { format!("{}\\{}", region, city) } else { format!("{}/{}", region, city) };
         tz_file.push_str(&s);
 
         // We run `.ok` to convert from Result to Option.
