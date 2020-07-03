@@ -38,11 +38,8 @@ fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Stat
     // If both geo-location values can be parsed...
     if let (Ok(region), Ok(city)) = (to_valid_format(region), to_valid_format(city)) {
         // TZfiles location can be customized through the TZFILES_DIR environment. Default location is /usr/share/zoneinfo.
-        let mut tz_file = {
-            let mut d = String::new();
-            d.push_str(&env::var("TZFILES_DIR").unwrap_or(format!("/usr/share/zoneinfo/")));
-            d
-        };
+        let mut tz_file = String::new();
+        tz_file.push_str(&env::var("TZFILES_DIR").unwrap_or(format!("/usr/share/zoneinfo/")));
     
         // Then we create a String using format to create a Timezone lookup key.
         let s = format!("{}/{}", region, city);
