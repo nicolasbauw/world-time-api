@@ -1,6 +1,6 @@
 [package]
 name = "world-time-api"
-version = "1.1.0"
+version = "1.2.0"
 authors = ["Nicolas BAUW <nbauw@hotmail.com>"]
 edition = "2018"
 description = "A world time API. Dockerfile provided."
@@ -13,4 +13,4 @@ repository = "https://github.com/nicolasbauw/world-time-api"
 
 [dependencies]
 rocket = "0.4.2"
-tzparse = { version = "1.0", features=["json"] }
+tzparse = { version = "1.1", features=["json"] }
