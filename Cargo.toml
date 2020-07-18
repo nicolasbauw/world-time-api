@@ -12,5 +12,5 @@ repository = "https://github.com/nicolasbauw/world-time-api"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rocket = "0.4.2"
+rocket = "0.4"
 tzparse = { version = "1.1", features=["json"] }
