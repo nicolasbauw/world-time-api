@@ -1,4 +1,4 @@
-FROM ekidd/rust-musl-builder:nightly-2019-11-06 AS builder
+FROM ekidd/rust-musl-builder:nightly-2020-07-12 AS builder
 RUN sudo apt update && sudo apt install -y upx
 ENV ROCKET_ENV=production
 ADD . ./
