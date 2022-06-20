@@ -1,9 +1,8 @@
-#![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
 
 use libtzfile::Tz;
-use rocket::{http::Status, response::content::Json};
+use rocket::{http::Status, serde::json::Json};
 use std::env;
 
 // Return a String that's correctly formatted for Timezone lookup.
@@ -15,9 +14,10 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
     let s: String = s.into();
     // We'll first have to make sure we convert any URI encoding to regular text.
     // This means we URI decode the input, so "%20" becomes " ", etc.
-    use rocket::http::uri::Uri;
+    use rocket::http::RawStr;
+    let raw_str = RawStr::new(&s);
     // Return the Decoded string as String, otherwise, return error
-    Uri::percent_decode(s.as_bytes())
+    RawStr::percent_decode(raw_str)
         .map(|s| s.to_string().replace(" ", "_"))
         .map_err(|_| String::from("Decoding error"))
 }
@@ -87,9 +87,10 @@ fn bad_request() -> Json<&'static str> {
 fn not_found<'a>(req: &'a rocket::Request) -> Json<String> {
     Json(format!("\"Unable to find Timezone {}\"", req.uri().path()))
 }
-fn main() {
-    rocket::ignite()
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
         .mount("/", routes![get_tzinfo])
-        .register(catchers![bad_request, not_found])
-        .launch();
+        .register("/", catchers![bad_request, not_found])
 }
