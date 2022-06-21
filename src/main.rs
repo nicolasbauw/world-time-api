@@ -2,7 +2,7 @@
 extern crate rocket;
 
 use libtzfile::Tz;
-use rocket::{http::Status, serde::json::Json};
+use rocket::{http::Status, http::RawStr, serde::json::Json};
 use std::env;
 
 // Return a String that's correctly formatted for Timezone lookup.
@@ -12,11 +12,10 @@ use std::env;
 // ToDo - we could convert accented characters to non-accents.
 fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
     let s: String = s.into();
+    let raw_str = RawStr::new(&s);
     // We'll first have to make sure we convert any URI encoding to regular text.
     // This means we URI decode the input, so "%20" becomes " ", etc.
-    use rocket::http::RawStr;
-    let raw_str = RawStr::new(&s);
-    // Return the Decoded string as String, otherwise, return error
+    // We return the Decoded string as String, otherwise, return error
     RawStr::percent_decode(raw_str)
         .map(|s| s.to_string().replace(" ", "_"))
         .map_err(|_| String::from("Decoding error"))
