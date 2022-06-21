@@ -1,8 +1,9 @@
 # World Time API
+
+![Current Crates.io Version](https://img.shields.io/crates/v/world-time-api.svg)](https://crates.io/crates/world-time-api)
+[![Downloads badge](https://img.shields.io/crates/d/world-time-api.svg)](https://crates.io/crates/world-time-api)
+
 An API to retrieve date / time / daylight saving time informations about a timezone.
-There are similar APIs already available on internet, my goals were:
-- to write it myself
-- access these informations within my organization without sending external requests.
 
 Example:
 ```
@@ -23,4 +24,4 @@ Some explanations about the offset fields:
 - dst_offset : the offset to utc during daylight saving time, in seconds
 - utc_offset : the current offset to utc, taking into account daylight saving time or not (according to dst_from and dst_until), in +/- HH:MM
 
-Provided dockerfile builds the app with statically compiled musl libc and then uses an alpine image to keep a low size.
+Provided dockerfile (which is no longer maintained) builds the app with statically compiled musl libc and then uses an alpine image to keep a low size.
