@@ -35,7 +35,7 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
 // If the requested Timezone has bad formatting, then we want to return an
 // error specifying that this is a 400, which we do via an Err.
 #[get("/<region>/<city>")]
-fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Status> {
+fn get_tzinfo(region: String, city: String) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
     // If both geo-location values can be parsed...
     if let (Ok(region), Ok(city)) = (to_valid_format(region), to_valid_format(city)) {
         // TZfiles location can be customized through the TZFILES_DIR environment. Default location is /usr/share/zoneinfo.
@@ -54,18 +54,11 @@ fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Stat
         // If it encounters a problem, then it returns None.
         // No matter if we get a Some or None, we wrap it in Ok.
         // We do this because Rocket can handle None as a 404.
+        // The Tzinfo struct implements the Serialize trait.
         let tz = Tz::new(&tz_file)
             .and_then(|z| z.zoneinfo())
             .ok()
-            .and_then(|tz_info| {
-                tz_info
-                    // This [returns a String](https://docs.rs/tzparse/1.0.3/src/tzparse/lib.rs.html#126)
-                    .to_json()
-                    // This returns the String as an Option
-                    .ok()
-                    // And we wrap the Option value in Json
-                    .map(Json)
-            });
+            .map(Json);
         Ok(tz)
     } else {
         // If both geo-location values can't be parsed, return a BadRequest
@@ -80,12 +73,12 @@ fn get_tzinfo(region: String, city: String) -> Result<Option<Json<String>>, Stat
 // Removed rocket::Request variable since we aren't using it.
 #[catch(400)]
 fn bad_request() -> Json<&'static str> {
-    Json("\"Invalid Timezone\"")
+    Json("Invalid Timezone")
 }
 // Again, nice to have Json.
 #[catch(404)]
 fn not_found<'a>(req: &'a rocket::Request) -> Json<String> {
-    Json(format!("\"Unable to find Timezone {}\"", req.uri().path()))
+    Json(format!("Unable to find Timezone {}", req.uri().path()))
 }
 
 #[launch]
