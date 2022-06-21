@@ -8,6 +8,8 @@ keywords = ["time", "world", "API"]
 categories = ["date-and-time"]
 license = "MIT"
 repository = "https://github.com/nicolasbauw/world-time-api"
+readme = "README.md"
+exclude = ["Dockerfile"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
