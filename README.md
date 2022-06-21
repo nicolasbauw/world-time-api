@@ -1,6 +1,6 @@
 # World Time API
 
-![Current Crates.io Version](https://img.shields.io/crates/v/world-time-api.svg)](https://crates.io/crates/world-time-api)
+[![Current Crates.io Version](https://img.shields.io/crates/v/world-time-api.svg)](https://crates.io/crates/world-time-api)
 [![Downloads badge](https://img.shields.io/crates/d/world-time-api.svg)](https://crates.io/crates/world-time-api)
 
 An API to retrieve date / time / daylight saving time informations about a timezone.
