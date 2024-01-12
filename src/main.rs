@@ -34,7 +34,7 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
 // If the requested Timezone has bad formatting, then we want to return an
 // error specifying that this is a 400, which we do via an Err.
 #[get("/<region>/<city>")]
-fn get_tzinfo(region: String, city: String) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
+fn get_tzinfo(region: &str, city: &str) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
     // If both geo-location values can be parsed...
     if let (Ok(region), Ok(city)) = (to_valid_format(region), to_valid_format(city)) {
         // TZfiles location can be customized through the TZFILES_DIR environment. Default location is /usr/share/zoneinfo.
