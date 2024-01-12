@@ -1,0 +1,16 @@
+rustup target add arm-unknown-linux-musleabihf
+brew install arm-linux-gnueabihf-binutils
+
+vi .cargo/config
+[target.arm-unknown-linux-musleabihf]
+linker = "arm-linux-gnueabihf-ld"
+
+cargo build --target="arm-unknown-linux-musleabihf" --release
+
+scp target/arm-unknown-linux-musleabihf/release/world-time-api user@host:~/
+
+vi Rocket.toml
+[global]
+address = "0.0.0.0"
+
+ROCKET_PORT=8080 ./world-time-api
