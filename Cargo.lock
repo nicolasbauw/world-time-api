@@ -153,6 +153,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2bd12c1caf447e69cd4528f47f94d203fd2582878ecb9e9465484c4148a8223"
 
 [[package]]
+name = "case_convert"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3f5584fa3208e11098d0b75b62e399293b7c1d338d38edd34ee74a553de768ea"
+
+[[package]]
 name = "cc"
 version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1687,8 +1693,9 @@ dependencies = [
 
 [[package]]
 name = "world-time-api"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
+ "case_convert",
  "libtzfile",
  "rocket",
 ]

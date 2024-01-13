@@ -4,6 +4,7 @@ extern crate rocket;
 use libtzfile::Tz;
 use rocket::{http::Status, http::RawStr, serde::json::Json};
 use std::env;
+use case_convert::CaseConvert;
 
 // Return a String that's correctly formatted for Timezone lookup.
 // Error if can't be parsed.
@@ -17,7 +18,7 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
     // This means we URI decode the input, so "%20" becomes " ", etc.
     // We return the Decoded string as String, otherwise, return error
     RawStr::percent_decode(raw_str)
-        .map(|s| s.to_string().replace(" ", "_"))
+        .map(|s| s.to_string().uppercase_first().replace(" ", "_"))
         .map_err(|_| String::from("Decoding error"))
 }
 
