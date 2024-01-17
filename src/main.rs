@@ -16,6 +16,7 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
     let raw_str = RawStr::new(&s);
     // We'll first have to make sure we convert any URI encoding to regular text.
     // This means we URI decode the input, so "%20" becomes " ", etc.
+    // the uppercase_first method is called to convert for example europe/paris to proper Europe/Paris.
     // We return the Decoded string as String, otherwise, return error
     RawStr::percent_decode(raw_str)
         .map(|s| s.to_string().uppercase_first().replace(" ", "_"))
@@ -34,7 +35,7 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
 //
 // If the requested Timezone has bad formatting, then we want to return an
 // error specifying that this is a 400, which we do via an Err.
-#[get("/zoneinfo/<region>/<city>")]
+#[get("/<region>/<city>")]
 fn get_tzinfo(region: &str, city: &str) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
     // If both geo-location values can be parsed...
     if let (Ok(region), Ok(city)) = (to_valid_format(region), to_valid_format(city)) {
@@ -66,7 +67,7 @@ fn get_tzinfo(region: &str, city: &str) -> Result<Option<Json<libtzfile::Tzinfo>
     }
 }
 
-#[get("/zoneinfo/<timezone>")]
+#[get("/<timezone>")]
 fn get_standardtime(timezone: &str) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
     // If timezone can be parsed...
     if let Ok(timezone) = to_valid_format(timezone) {
@@ -104,6 +105,6 @@ fn not_found<'a>(req: &'a rocket::Request) -> Json<String> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![get_tzinfo, get_standardtime])
-        .register("/", catchers![bad_request, not_found])
+        .mount("/zoneinfo", routes![get_tzinfo, get_standardtime])
+        .register("/zoneinfo", catchers![bad_request, not_found])
 }
