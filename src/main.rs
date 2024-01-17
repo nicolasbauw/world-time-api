@@ -87,6 +87,11 @@ fn get_standardtime(timezone: &str) -> Result<Option<Json<libtzfile::Tzinfo>>, S
     }
 }
 
+#[get("/")]
+fn get_root() -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
+    Err(Status::BadRequest)
+}
+
 // Error Catchers
 
 // It's nice to have this come back as Json.
@@ -105,6 +110,6 @@ fn not_found<'a>(req: &'a rocket::Request) -> Json<String> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/zoneinfo", routes![get_tzinfo, get_standardtime])
+        .mount("/zoneinfo", routes![get_tzinfo, get_standardtime, get_root])
         .register("/zoneinfo", catchers![bad_request, not_found])
 }
