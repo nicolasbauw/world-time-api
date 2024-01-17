@@ -1,3 +1,6 @@
+Some infos are coming from this page
+https://amritrathie.vercel.app/posts/2020/03/06/cross-compiling-rust-from-macos-to-raspberry-pi/
+
 Cross-compilation notes for Raspberry Pi Model 1B
 
 rustup target add arm-unknown-linux-musleabihf
