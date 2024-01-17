@@ -34,7 +34,7 @@ fn to_valid_format<S: Into<String>>(s: S) -> Result<String, String> {
 //
 // If the requested Timezone has bad formatting, then we want to return an
 // error specifying that this is a 400, which we do via an Err.
-#[get("/<region>/<city>")]
+#[get("/zoneinfo/<region>/<city>")]
 fn get_tzinfo(region: &str, city: &str) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
     // If both geo-location values can be parsed...
     if let (Ok(region), Ok(city)) = (to_valid_format(region), to_valid_format(city)) {
@@ -66,6 +66,26 @@ fn get_tzinfo(region: &str, city: &str) -> Result<Option<Json<libtzfile::Tzinfo>
     }
 }
 
+#[get("/zoneinfo/<timezone>")]
+fn get_standardtime(timezone: &str) -> Result<Option<Json<libtzfile::Tzinfo>>, Status> {
+    // If timezone can be parsed...
+    if let Ok(timezone) = to_valid_format(timezone) {
+        // TZfiles location can be customized through the TZFILES_DIR environment. Default location is /usr/share/zoneinfo.
+        let mut tz_file = String::new();
+        tz_file.push_str(&env::var("TZFILES_DIR").unwrap_or(format!("/usr/share/zoneinfo/")));
+        tz_file.push_str(&timezone);
+
+        let tz = Tz::new(&tz_file)
+            .and_then(|z| z.zoneinfo())
+            .ok()
+            .map(Json);
+        Ok(tz)
+    } else {
+        // If both geo-location values can't be parsed, return a BadRequest
+        Err(Status::BadRequest)
+    }
+}
+
 // Error Catchers
 
 // It's nice to have this come back as Json.
@@ -84,6 +104,6 @@ fn not_found<'a>(req: &'a rocket::Request) -> Json<String> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![get_tzinfo])
+        .mount("/", routes![get_tzinfo, get_standardtime])
         .register("/", catchers![bad_request, not_found])
 }
