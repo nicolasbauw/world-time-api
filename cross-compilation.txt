@@ -9,6 +9,7 @@ brew install arm-linux-gnueabihf-binutils
 vi .cargo/config
 [target.arm-unknown-linux-musleabihf]
 linker = "arm-linux-gnueabihf-ld"
+rustflags = "-C target-cpu=arm1176jzf-s"
 
 cargo build --target="arm-unknown-linux-musleabihf" --release
 
